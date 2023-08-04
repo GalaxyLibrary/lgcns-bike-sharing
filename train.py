@@ -20,7 +20,7 @@ from src.common.logger import (
 )
 from src.common.metrics import rmse_cv_score
 from src.common.utils import get_param_set
-#from src.preprocess import preprocess_pipeline
+from src.preprocess import preprocess_pipeline
 
 logger = set_logger(os.path.join(LOG_FILEPATH, "logs.log"))
 sys.excepthook = handle_exception
@@ -30,10 +30,9 @@ if __name__ == "__main__":
     train_df = pd.read_csv(os.path.join(DATA_PATH, "bike_sharing_train.csv"))
     logger.debug("Load data")
 
-    _X = train_df.drop(["datetime", "count"],axis=1)
-    y = np.log1p(train_df["count"])
-    X = _X.copy()
-    #X = preprocess_pipeline.fit_transform(X=_X, y=y)
+    _X = train_df.drop(['datetime','count'],axis=1)
+    y = np.sqrt(train_df['count'])
+    X = preprocess_pipeline.fit_transform(X=_X, y=y)
 
     # Data storage - 피처 데이터 저장
     if not os.path.exists(os.path.join(DATA_PATH, "storage")):
@@ -67,7 +66,7 @@ if __name__ == "__main__":
             regr = GradientBoostingRegressor(**params)
             pipeline = Pipeline(
                 [
-                #("preprocessor", preprocess_pipeline), 
+                ("preprocessor", preprocess_pipeline), 
                  ("regr", regr)]
             )
             pipeline.fit(_X, y)

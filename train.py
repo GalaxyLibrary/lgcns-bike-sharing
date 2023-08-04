@@ -33,7 +33,6 @@ if __name__ == "__main__":
     _X = train_df.drop(['datetime','count'],axis=1)
     y = np.sqrt(train_df['count'])
     X = preprocess_pipeline.fit_transform(X=_X, y=y)
-   
 
     # Data storage - 피처 데이터 저장
     if not os.path.exists(os.path.join(DATA_PATH, "storage")):

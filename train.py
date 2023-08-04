@@ -30,15 +30,15 @@ if __name__ == "__main__":
     train_df = pd.read_csv(os.path.join(DATA_PATH, "bike_sharing_train.csv"))
     logger.debug("Load data")
 
-    _X = train_df.drop(["datetime"],axis=1)
+    _X = train_df.drop(["datetime", "count"],axis=1)
     y = np.log1p(train_df["count"])
-    X = _X
+    X = _X.copy()
     #X = preprocess_pipeline.fit_transform(X=_X, y=y)
 
     # Data storage - 피처 데이터 저장
     if not os.path.exists(os.path.join(DATA_PATH, "storage")):
         os.makedirs(os.path.join(DATA_PATH, "storage"))
-    X.assign(rent=y).to_csv(
+    X.assign(count=y).to_csv(
         os.path.join(DATA_PATH, "storage", "bike_sharing_features.csv"),
         index=False,
     )
